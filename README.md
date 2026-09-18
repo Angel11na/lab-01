@@ -1,79 +1,89 @@
 # `ember` — starter skeleton (Lab 1)
+### Виконала: _Донець А.М._
 
-Copy this folder to a repository of your own, `git init`, and start from **M1** of
-[Lab 01](../lab-01-a-box-of-bytes.md). It builds and runs as-is.
+## M1 - Збірка та запуск проєкту
+![M1](./demo/screenshot_20260918_204327-region.png)
 
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-cmake --build build
-./build/ember
+
+## M2 - "Коробку" ініційовано нулями
+![M2](./demo/screenshot_20260918_222909-region.png)
+
+## M3 - mem_set/mem_get працюють
+![M3](./demo/screenshot_20260918_225623-region.png)
+
+## Quit працює
+![Quit](./demo/screenshot_20260918_230844-region.png)
+
+
+## Досліди
+### Код дослідів описано в ./excercises, скомпільована у ./excercises/bin
+
+### 1 - sizeof — ширина на цій машині
+
+Отримано типовий х64
+
+```
+~/Documents/progamming/lab-01 master*
+❯ g++ ./excercises/1.cpp -o ./excercises/bin/1
+
+~/Documents/progamming/lab-01 master*
+❯ ./excercises/bin/1
+1 4 4 8 8
+1 2
 ```
 
-## Why a skeleton exists
+### 2 - Переповнення: wrap vs UB
 
-Lab 1 is about **bytes and types**. It is not about `while` loops, splitting a
-string into words, or `std::setw` — you meet those properly in Labs 4, 5 and 7.
-So the parts that need them are given to you, fully written and commented. You
-read those. You write the four small things that *are* Lab 1.
+Виконалося переповнення максимального значення INT 
 
-## Given — read it, don't rewrite it
+_2147483648 + 1 = -2147483648_
 
-| File | What it does |
-|---|---|
-| `CMakeLists.txt` | C++17, `-Wall -Wextra -Werror`, ASan + UBSan on Debug |
-| `src/main.cpp` | the prompt: read a line, split it into words, call your functions |
-| `src/memory.hpp` | `Byte`, `MEM_SIZE`, `struct Memory` — the box |
-| `src/dump.hpp` | the two declarations |
-| `src/dump.cpp` → `dump()` | the hex dump loop |
+_Макссимальне значення + 1 = Мінімальне значення_
 
-## Yours — four `TODO(lab-01)` markers
+```
+~/Documents/progamming/lab-01 master*
+❯ g++ ./excercises/2.cpp -o ./excercises/bin/2
 
-```bash
-grep -rn "TODO(lab-01)" src/
+~/Documents/progamming/lab-01 master*
+❯ ./excercises/bin/2
+0
+-2147483648
 ```
 
-| # | Where | The job |
-|---|---|---|
-| 1 | `memory.cpp` → `mem_get` | return the byte, or 0 if the address is outside the box |
-| 2 | `memory.cpp` → `mem_set` | write the byte, or return `false` if the address is outside |
-| 3 | `dump.cpp` → the ASCII gutter | print the character when the byte is printable |
-| 4 | `dump.cpp` → `show_byte` | one byte, four views |
+### 3 - Числа з рухомою комою
 
-When all four are done:
+Отримано _0.1 + 0.2 != 0.3_ через бінарну неточність представлення чисел в комп'ютері.
 
-```txt
-ember> set 0 65
-ember> set 1 66
-ember> get 0
-65  0x41  0b01000001  'A'
-ember> dump
-0000  41 42 00 00 00 00 00 00 00 00 00 00 00 00 00 00  |AB..............|
+0.1 = 0b 0001 1001 1001 1001 1001 ...
+
+0.2 = 0b 0011 0011 0011 0011 0011 ...
+
+0.3 = 0b 0100 1100 1100 1100 1100 ...
+
+Але, через будь-яке округлення бітів в кінці, результат зсувається, тому при порівняні чисел з комою, можливі неточності. Й результат може бути:
+
+0.1 + 0.2 = 0.300000000000....00001 != 0.3
+
+```
+~/Documents/progamming/lab-01 master*
+❯ g++ ./excercises/3.cpp -o ./excercises/bin/3
+
+~/Documents/progamming/lab-01 master*
+❯ ./excercises/bin/3
+0.3
+false
 ```
 
-That is M2 and M3 of Lab 1. M4 (the three deliberate breakages) is in the lab.
+### 4 - Символ — це теж число
+Символи перетворюють через ASCII таблицю. 
+```
+~/Documents/progamming/lab-01 master*
+❯ g++ ./excercises/4.cpp -o ./excercises/bin/4
 
-Until you implement `mem_set`, `set` accepts everything and stores nothing, and
-`get` prints `show_byte: not implemented yet`. That is the starting state, not a
-bug.
-
-## Later labs
-
-You keep this repository for all eight labs. Every lab adds one `else if` branch
-to the dispatcher in `main.cpp` and one or two new files next to these.
-
----
-
-## Українською
-
-Скопіюйте цю теку у свій репозиторій — вона вже збирається й запускається.
-
-Lab 1 — про **байти й типи**, а не про цикли, розбір рядка на слова чи
-форматування виводу (це Labs 4, 5, 7). Тому все, що потребує ще не пройденого,
-вам **дано** — з коментарями, щоб читати. Ви пишете чотири маленькі речі, які й
-є Lab 1: `mem_get`, `mem_set`, ASCII-колонку в дампі та `show_byte`.
-
-Знайти свою роботу: `grep -rn "TODO(lab-01)" src/`.
-
-Якщо C++ бачите вперше — спочатку
-[C++ за годину](../cpp-survival-kit.notes.md), потім
-[інструменти й git](../setup.notes.md).
+~/Documents/progamming/lab-01 master*
+❯ ./excercises/bin/4
+65 65 65 A
+B
+2 2.5
+```
+![ASCII table](./demo/ascii.png)

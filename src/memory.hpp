@@ -4,6 +4,7 @@
 // four of the five ideas in Lab 1's theory are visible here.
 #pragma once
 
+#include <iostream>
 #include <cstddef>
 #include <cstdint>
 
@@ -14,12 +15,13 @@ using Byte = std::uint8_t;
 // `const` means: this name will not be used to change these bits.
 const std::size_t MEM_SIZE = 4096;
 
+
 struct Memory {
     // The `{}` zero-initializes the whole array.
     // Experiment (Lab 1, M4): delete the `{}`, rebuild, `dump`. What appears?
     // Put the `{}` back afterwards — reading uninitialized memory is UB,
     // and this course does not ship UB.
-    Byte data[MEM_SIZE]{};
+    Byte data[MEM_SIZE];
 };
 
 // Read the byte at `addr`. If `addr` is outside the box, return 0.
