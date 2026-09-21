@@ -36,6 +36,7 @@ static void print_help() {
               << "  dump              print all " << MEM_SIZE << " bytes\n"
               << "  get <addr>        show one byte four ways\n"
               << "  set <addr> <val>  write one byte (dec or 0x hex)\n"
+              << "  inc <addr>        increment value and overwrite\n"
               << "  help              this list\n"
               << "  quit              leave\n";
 }
@@ -72,13 +73,17 @@ int main() {
 
         if (cmd.empty()) {
             continue;  // the user just pressed Enter
-        } else if (cmd == "quit" || cmd == "exit") {
+        }
+        else if (cmd == "quit" || cmd == "exit") {
             break;
-        } else if (cmd == "help") {
+        }
+        else if (cmd == "help") {
             print_help();
-        } else if (cmd == "dump") {
+        }
+        else if (cmd == "dump") {
             dump(mem);
-        } else if (cmd == "get") {
+        }
+        else if (cmd == "get") {
 
             std::string a;
             long addr = 0;
@@ -90,7 +95,8 @@ int main() {
                 show_byte(mem_get(mem, static_cast<std::size_t>(addr)));
             }
 
-        } else if (cmd == "set") {
+        }
+        else if (cmd == "set") {
             
             std::string a, v;
             long addr = 0, value = 0;
@@ -110,7 +116,27 @@ int main() {
                           << '\n';
             }
 
-        } else {
+        } 
+        else if (cmd == "inc"){
+            string a;
+            long addr = 0;
+
+            if (!(words >> a) || !parse_number(a, addr)) {
+                cout << "usage: inc <addr>\n";
+            }
+            else if (addr < 0) {
+                cout << "address must not be negative\n";
+            }
+            else {
+                bool result = inc(mem, addr);
+
+                if(!result){
+                    cout << "Error during cmd: inc <addr>, addr = " << addr << "\n";
+                }
+            }
+
+        }
+        else {
             std::cout << "unknown command: " << cmd << " (try `help`)\n";
         }
     }

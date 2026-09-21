@@ -10,7 +10,7 @@
 
 
 // How many bytes we print on one line. Try changing it to 8 and rebuilding.
-const std::size_t BYTES_PER_LINE = 16;
+const std::size_t BYTES_PER_LINE = 32;
 
 // Is this byte something a terminal can print as a glyph?
 // 0x20 is space, 0x7E is '~'. Everything outside that range we show as '.'.
@@ -70,7 +70,8 @@ std::string to_bin(long long n, int bits = 8) {
 
 
 
-
+// Показати байт у вигляді 10го, 16го, 2го, та символ
+//  Приймає байт, друкує строку виду: 65  0x41  0b01000001  'A'
 void show_byte(Byte b) {
     // Expected for `set 0 65` then `get 0`:
     //   65  0x41  0b01000001  'A'

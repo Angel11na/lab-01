@@ -32,3 +32,7 @@ Byte mem_get(const Memory& mem, std::size_t addr);
 // outside the box. Returning false is how main.cpp knows to print a message.
 // TODO(lab-01, M3): implement in memory.cpp.
 bool mem_set(Memory& mem, std::size_t addr, Byte value);
+
+//  Get byte, increment and overwrite
+bool inc(Memory& mem, std::size_t addr);
+

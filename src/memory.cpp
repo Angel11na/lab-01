@@ -6,9 +6,12 @@
 //  whole subject of Lab 3.
 #include "memory.hpp"
 
+
+const int SIZE = 4095;
+
 Byte mem_get(const Memory& mem, std::size_t addr) {
     
-    if(addr > 4095)
+    if(addr > SIZE)
         return 0;
 
     return mem.data[addr];
@@ -17,9 +20,20 @@ Byte mem_get(const Memory& mem, std::size_t addr) {
 
 bool mem_set(Memory& mem, std::size_t addr, Byte value) {
     
-    if(addr > 4095)
+    if(addr > SIZE)
         return false;
 
     mem.data[addr] = value;
     return true;
+}
+
+
+bool inc(Memory& mem, std::size_t addr){
+
+    if(addr > SIZE)
+        return false;
+    
+    Byte b = mem_get(mem, addr);
+    b++;
+    return mem_set(mem, addr, b);
 }
